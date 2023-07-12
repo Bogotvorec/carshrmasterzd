@@ -8,19 +8,24 @@ bot = Bot(os.getenv('TOKEN'))
 dp = Dispatcher(bot=bot)
 
 main = ReplyKeyboardMarkup(resize_keyboard=True)
-main.add('Функції').add('Взяти тачку').add('Сдати звіт').add('Політика')
+main.add('Взяти тачку').add('Сдати звіт').add('Передати показники').add('Політика')
 
-main = ReplyKeyboardMarkup(resize_keyboard=True)
-main.add('Функції').add('Взяти тачку').add('Сдати звіт').add('Політика').add('Адмін-панель')
+main_admin = ReplyKeyboardMarkup(resize_keyboard=True)
+main_admin.add('Функції').add('Взяти тачку').add('Сдати звіт').add('Політика').add('Адмін-панель')
 
 admin_panel = ReplyKeyboardMarkup(resize_keyboard=True)
-
+admin_panel.add('').add('Взяти тачку').add('Сдати звіт').add('Додати користувача').add('Відправити на Бронь')
 @dp.message_handler(commands=['start'])
 async def cmd_stat(message: types.message):
     await message.answer_sticker('CAACAgIAAxkBAAMdZK6VIgzmTEVQzdkYOqLA91KY5tcAAhoAA8A2TxOC27C1PAZBVy8E')
     await message.answer (f'{message.from_user.first_name} Пиздуй отсюда',
                           reply_markup=main)
+    if message.from_user.id == int(os.getenv('ADMIN_ID')):
+        await message.answer(f'Ви авторизувались як Аміністратор!', reply_markup=main_admin)
 
+@dp.message_handler(commands=['id'])
+async def cmd_id(message: types.Message):
+    await message.answer(f'{message.from_user.id}')
 @dp.message_handler(text='Взяти тачку')
 async def takecar(massage: types.Message):
     await massage.answer(f'Машину подано Cер! , ви можете взять ключи в оговоренном месте')
@@ -38,6 +43,12 @@ async def takecar(massage: types.Message):
 async def takecar(massage: types.Message):
     await massage.answer(f'Машину подано Cер! , ви можете взять ключи в оговоренном месте')
 
+@dp.message_handler(text='Адмін-панель')
+async def takecar(massage: types.Message):
+    if massage.from_user.id == int(os.getenv('ADMIN_ID')):
+        await massage.answer(f'Ви увійшли в адмін панель!', reply_markup=admin_panel)
+    else:
+        await massage.reply('воу-воу ти не Адмін')
 
 #@dp.message_handler(content_types=['start'])
 #async def chek_stiker(messege: types.Message):
