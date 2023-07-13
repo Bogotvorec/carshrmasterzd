@@ -1,5 +1,5 @@
 from aiogram import Bot, Dispatcher, executor, types
-from aiogram.types import ReplyKeyboardMarkup
+from aiogram.types import ReplyKeyboardMarkup,InlineKeyboardMarkup, InlineKeyboardButton
 from dotenv import load_dotenv
 import os
 
@@ -8,13 +8,21 @@ bot = Bot(os.getenv('TOKEN'))
 dp = Dispatcher(bot=bot)
 
 main = ReplyKeyboardMarkup(resize_keyboard=True)
-main.add('Взяти тачку').add('Сдати звіт').add('Передати показники').add('Політика')
+main.add('Взяти тачку').add('Сдати тачку').add('Передати показники').add('Інформація')
 
-main_admin = ReplyKeyboardMarkup(resize_keyboard=True)
-main_admin.add('Функції').add('Взяти тачку').add('Сдати звіт').add('Політика').add('Адмін-панель')
+main_admin = ReplyKeyboardMarkup(resize_keyboard=True) #Переменная админ панели (с подстройкой под экран)
+main_admin.add('Функції').add('Взяти тачку').add('Сдати тачку').add('Політика').add('Адмін-панель') # перечесление кнопок адмін пан
 
 admin_panel = ReplyKeyboardMarkup(resize_keyboard=True)
 admin_panel.add('').add('Взяти тачку').add('Сдати звіт').add('Додати користувача').add('Відправити на Бронь')
+
+
+catalog_list = InlineKeyboardMarkup(row_width=2) #інлайн меню
+catalog_list.add(InlineKeyboardButton(text= 'Політика використання', url='https://www.google.com/'),InlineKeyboardButton(text='Інструкції ',url='https://www.google.com/'),InlineKeyboardButton(text='Телефонна книга',url='https://www.google.com/'))
+
+
+
+
 @dp.message_handler(commands=['start'])
 async def cmd_stat(message: types.message):
     await message.answer_sticker('CAACAgIAAxkBAAMdZK6VIgzmTEVQzdkYOqLA91KY5tcAAhoAA8A2TxOC27C1PAZBVy8E')
@@ -30,18 +38,18 @@ async def cmd_id(message: types.Message):
 async def takecar(massage: types.Message):
     await massage.answer(f'Машину подано Cер! , ви можете взять ключи в оговоренном месте')
 
-@dp.message_handler(text='Сдати звіт')
+@dp.message_handler(text='Сдати тачку')
 async def takecar(massage: types.Message):
     await massage.answer(f'Машину подано Cер! , ви можете взять ключи в оговоренном месте')
 
-@dp.message_handler(text='Функції')
+@dp.message_handler(text='Передати показник')
 async def takecar(massage: types.Message):
     await massage.answer(f'Машину подано Cер! , ви можете взять ключи в оговоренном месте')
 
 
-@dp.message_handler(text='Політика')
+@dp.message_handler(text='Інформація')
 async def takecar(massage: types.Message):
-    await massage.answer(f'Машину подано Cер! , ви можете взять ключи в оговоренном месте')
+    await massage.answer(f'Машину подано Cер! , ви можете взять ключи в оговоренном месте',reply_markup=catalog_list)
 
 @dp.message_handler(text='Адмін-панель')
 async def takecar(massage: types.Message):
