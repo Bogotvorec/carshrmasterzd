@@ -69,15 +69,23 @@ async def answer(message: types.Message):
     await message.reply('Ты втираешь мне дичь')
 
 
-@dp.message_handler()
-async  def callback_query_keyboadr(callback_query: types.CallbackQuery):
-    if callback_query.data == 'sneakers':
-        await bot.send_message(chat_id=callback_query.from_user.id, text='время хоперблок')
+#@dp.message_handler()
+#async  def callback_query_keyboadr(callback_query: types.CallbackQuery):
+#    if callback_query.data == 'sneakers':
+#        await bot.send_message(chat_id=callback_query.from_user.id, text='время хоперблок')
 
+@dp.callback_query_handler()
+async def callback_query_keyboard(callback_query: types.CallbackQuery):
+    if callback_query.data == 't-shirt':
+        await bot.send_message(chat_id=callback_query.from_user.id, text='Вы выбрали футболки')
+    elif callback_query.data == 'shorts':
+        await bot.send_message(chat_id=callback_query.from_user.id, text='Вы выбрали шорты')
+    elif callback_query.data == 'sneakers':
+        await bot.send_message(chat_id=callback_query.from_user.id, text='Вы выбрали кроссовки')
 
 
 
 
 
 if __name__ == '__main__':
-    executor.start_polling(dp, on_startup=on_startup)
+    executor.start_polling(dp, on_startup=on_startup, skip_updates=True)
