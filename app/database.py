@@ -15,3 +15,7 @@ async def db_start():
                 "photo TEXT, "
                 "brand TEXT)")
     db.commit()
+
+
+async def cmd_start_db(user_id):
+    user = cur.execute(("SELECT * FROM account WHER tg_id == {key}".format(key)))
